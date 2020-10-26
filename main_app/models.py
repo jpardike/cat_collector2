@@ -8,6 +8,8 @@ class Cat:
         self.description = description
         self.age = age
 
-felix = Cat('Felix', 'ally cat', 'trouble maker', 5)
-
-print(felix)
+cats = [
+    Cat('Felix', 'ally cat', 'trouble maker', 5),
+    Cat('Harvey', 'sphynx', 'black', 2),
+    Cat('Mittins', 'siamese', 'very friendly', 14)
+]
