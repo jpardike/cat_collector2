@@ -1,15 +1,30 @@
 from django.db import models
 
-# Create your models here.
-class Cat:
-    def __init__(self, name, breed, description, age):
-        self.name = name
-        self.breed = breed
-        self.description = description
-        self.age = age
+MEALS = (
+    ('B', 'Breakfast'),
+    ('L', 'Lunch'),
+    ('D', 'Dinner')
+)
 
-cats = [
-    Cat('Felix', 'ally cat', 'trouble maker', 5),
-    Cat('Harvey', 'sphynx', 'black', 2),
-    Cat('Mittins', 'siamese', 'very friendly', 14)
-]
+# Create your models here.
+class Cat(models.Model):
+    name = models.CharField(max_length=100)
+    breed = models.CharField(max_length=100)
+    description = models.TextField(max_length=250)
+    age = models.IntegerField()
+
+    def __str__(self):
+        return self.name
+
+class Feeding(models.Model):
+    date = models.DateField()
+    meal = models.CharField(
+        max_length=1,
+        choices=MEALS,
+        default=MEALS[0][0]
+    )
+
+    cat = models.ForeignKey(Cat, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.get_meal_display()} on {self.date}'
