@@ -11,13 +11,25 @@ Or if you want to work off of this project on your machine follow these steps.
 $ brew install python@3.9
 ```
 
-2. Create a new virtual environment in your project with
+3. Create a catcollector database if you don't already have one.
+```bash
+createdb catcollector
+```
+
+4. Create a new virtual environment in your project with
 ```bash
 $ python3 -m venv .env
 $ source .env/bin/activate
 ```
 
-Install its dependencies with
+5. Install its dependencies with
 ```bash
 $ pip3 install -r requirements.txt
 ```
+
+6. Start your application in the shell where you activated your virtual environment
+```bash
+python3 manage.py runserver
+```
+
+
