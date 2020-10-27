@@ -1,4 +1,4 @@
-## Cat Controller
+## Cat Collector
 
 Feel free to browse these files as a reference.
 
