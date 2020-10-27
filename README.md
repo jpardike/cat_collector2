@@ -13,7 +13,7 @@ $ brew install python@3.9
 
 3. Create a catcollector database if you don't already have one.
 ```bash
-createdb catcollector
+$ createdb catcollector
 ```
 
 4. Create a new virtual environment in your project with
@@ -29,7 +29,7 @@ $ pip3 install -r requirements.txt
 
 6. Start your application in the shell where you activated your virtual environment
 ```bash
-python3 manage.py runserver
+$ python3 manage.py runserver
 ```
 
 
