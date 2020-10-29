@@ -16,4 +16,6 @@ urlpatterns = [
     path('cats/<int:cat_id>/add_feeding/', views.add_feeding, name='add_feeding'),
     # Cat Toys
     path('cats/<int:cat_id>/assoc_toy/<int:toy_id>/', views.assoc_toy, name="assoc_toy"),
+    # Auth
+    path('accounts/signup', views.signup, name='signup'),
 ]

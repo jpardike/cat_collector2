@@ -21,8 +21,15 @@
         <ul class="right">
           <li><a href="{% url 'home' %}">Home</a></li>
           <li><a href="{% url 'about' %}">About</a></li>
-          <li><a href="{% url 'add_cat' %}">Add Cat</a></li>
-          <li><a href="{% url 'cats_index' %}">See All My Cats</a></li>
+
+          {% if user.is_authenticated %}
+            <li><a href="{% url 'add_cat' %}">Add Cat</a></li>
+            <li><a href="{% url 'cats_index' %}">See All My Cats</a></li>
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+          {% else %}
+            <li><a href="{% url 'signup' %}">Sign Up</a></li>
+            <li><a href="{% url 'login' %}">Login</a></li>
+          {% endif %}
         </ul>
       </div>
     </nav>

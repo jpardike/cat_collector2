@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import Cat, Toy
 from .forms import FeedingForm, CatForm
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
 
 
 # ----------------------- STATIC PAGES
@@ -14,11 +17,13 @@ def about(request):
 
 # ----------------------- CATS
 
+@login_required
 def cats_index(request):
-    cats = Cat.objects.all()
+    cats = Cat.objects.filter(user=request.user)
 
     return render(request, 'cats/index.html', { 'cats': cats })
 
+@login_required
 def cats_detail(request, cat_id):
     cat = Cat.objects.get(id=cat_id)
 
@@ -32,12 +37,15 @@ def cats_detail(request, cat_id):
         'toys': toys_cat_doesnt_have
     })
 
-
+@login_required
 def add_cat(request):
     if request.method == 'POST':
         cat_form = CatForm(request.POST)
         if cat_form.is_valid():
-            new_cat = cat_form.save()
+            new_cat = cat_form.save(commit=False)
+            new_cat.user = request.user
+            new_cat.save()
+
             return redirect('detail', new_cat.id)
     else:
         form = CatForm()
@@ -45,11 +53,13 @@ def add_cat(request):
         return render(request, 'cats/new.html', context)
 
 
+@login_required
 def delete_cat(request, cat_id):
     Cat.objects.get(id=cat_id).delete()
     return redirect('cats_index')
 
 
+@login_required
 def edit_cat(request, cat_id):
     cat = Cat.objects.get(id=cat_id)
 
@@ -65,6 +75,7 @@ def edit_cat(request, cat_id):
 
 # ----------------------- CAT TOYS
 
+@login_required
 def assoc_toy(request, cat_id, toy_id):
     # Find Cat by id
     cat = Cat.objects.get(id=cat_id)
@@ -75,6 +86,7 @@ def assoc_toy(request, cat_id, toy_id):
 
 # ----------------------- CAT FEEDINGS
 
+@login_required
 def add_feeding(request, cat_id):
     form = FeedingForm(request.POST)
 
@@ -87,3 +99,29 @@ def add_feeding(request, cat_id):
 
     return redirect('detail', cat_id)
     
+
+# AUTH
+def signup(request):
+  error_message = ''
+
+  if request.method == 'POST':
+    # This is how to create a 'user' form object
+    # that includes the data from the browser
+    form = UserCreationForm(request.POST)
+    if form.is_valid():
+      # This will add the user to the database
+      user = form.save()
+      # This is how we log a user in via code
+      login(request, user)
+      return redirect('cats_index')
+    else:
+        error_message = 'Invalid sign up - try again'
+
+        form = UserCreationForm()
+
+        context = {'form': form, 'error_message': error_message}
+        return render(request, 'registration/signup.html', context)
+  # A GET or a bad POST request, so render signup.html with an empty form
+  form = UserCreationForm()
+  context = {'form': form, 'error_message': error_message}
+  return render(request, 'registration/signup.html', context)
