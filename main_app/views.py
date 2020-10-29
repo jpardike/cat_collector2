@@ -49,6 +49,20 @@ def delete_cat(request, cat_id):
     Cat.objects.get(id=cat_id).delete()
     return redirect('cats_index')
 
+
+def edit_cat(request, cat_id):
+    cat = Cat.objects.get(id=cat_id)
+
+    if request.method == 'POST':
+        cat_form = CatForm(request.POST, instance=cat)
+        if cat_form.is_valid():
+            updated_cat = cat_form.save()
+            return redirect('detail', updated_cat.id)
+    else:
+        form = CatForm(instance=cat)
+        context = {'form': form, 'cat': cat}
+        return render(request, 'cats/edit.html', context)
+
 # ----------------------- CAT TOYS
 
 def assoc_toy(request, cat_id, toy_id):

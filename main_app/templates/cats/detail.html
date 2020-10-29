@@ -20,7 +20,7 @@
       <!-- Edit & Delete Actions -->
       <div class="card-action">
         <a href="{% url 'delete_cat' cat.id %}" class="btn-small red">Delete</a>
-        <a class="btn-small">Edit</a>
+        <a href="{% url 'edit_cat' cat.id %}" class="btn-small">Edit</a>
       </div>
 
 
