@@ -1,14 +1,18 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import Cat, Toy
-from .forms import FeedingForm
+from .forms import FeedingForm, CatForm
 
-# Create your views here.
+
+# ----------------------- STATIC PAGES
 def home(request):
     return render(request, 'home.html')
 
 def about(request):
     return render(request, 'about.html')
+
+
+# ----------------------- CATS
 
 def cats_index(request):
     cats = Cat.objects.all()
@@ -29,6 +33,24 @@ def cats_detail(request, cat_id):
     })
 
 
+def add_cat(request):
+    if request.method == 'POST':
+        cat_form = CatForm(request.POST)
+        if cat_form.is_valid():
+            new_cat = cat_form.save()
+            return redirect('detail', new_cat.id)
+    else:
+        form = CatForm()
+        context = {'form': form}
+        return render(request, 'cats/new.html', context)
+
+
+def delete_cat(request, cat_id):
+    Cat.objects.get(id=cat_id).delete()
+    return redirect('cats_index')
+
+# ----------------------- CAT TOYS
+
 def assoc_toy(request, cat_id, toy_id):
     # Find Cat by id
     cat = Cat.objects.get(id=cat_id)
@@ -36,6 +58,8 @@ def assoc_toy(request, cat_id, toy_id):
     cat.toys.add(toy)
     return redirect('detail', cat_id)
 
+
+# ----------------------- CAT FEEDINGS
 
 def add_feeding(request, cat_id):
     form = FeedingForm(request.POST)
@@ -47,5 +71,5 @@ def add_feeding(request, cat_id):
         new_form.cat_id = cat_id
         new_form.save()
 
-    return redirect('detail', cat_id=cat_id)
+    return redirect('detail', cat_id)
     

@@ -16,6 +16,14 @@
           <p>Age: Kitten</p>
         {% endif %}
       </div>
+
+      <!-- Edit & Delete Actions -->
+      <div class="card-action">
+        <a href="{% url 'delete_cat' cat.id %}" class="btn-small red">Delete</a>
+        <a class="btn-small">Edit</a>
+      </div>
+
+
     </div>
   </div>
   <div class="col s6">
@@ -52,12 +60,6 @@
               A <span style="color: {{ toy.color }}">{{ toy.color }}</span> {{ toy.name }}
             </span>
           </div>
-          <div class="card-action">
-            <form action="{% url 'assoc_toy' cat.id toy.id %}" method="post">
-              {% csrf_token %}
-              <button type="submit" class="btn">Remove</button>
-            </form>
-          </div>
         </div>
       {% endfor %}
     {% else %}
@@ -77,7 +79,7 @@
             </span>
           </div>
           <div class="card-action">
-            <form action="{% url 'assoc_toy' cat_id toy_id %}" method="post">
+            <form action="{% url 'assoc_toy' cat.id toy.id %}" method="post">
               {% csrf_token %}
               <button type="submit" class="btn">Add</button>
             </form>
